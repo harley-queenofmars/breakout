@@ -31,7 +31,7 @@ if (ENVIRONMENT_IS_NODE) {}
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpihak8kbs.js
+// include: /tmp/tmp31e20yhm.js
 Module["expectedDataFileDownloads"] ??= 0;
 
 Module["expectedDataFileDownloads"]++;
@@ -50,7 +50,7 @@ Module["expectedDataFileDownloads"]++;
       // web worker
       PACKAGE_PATH = encodeURIComponent(location.pathname.substring(0, location.pathname.lastIndexOf("/")) + "/");
     }
-    var PACKAGE_NAME = "/home/darko/Documents/GitHub/breakout-wasm/docs/index.data";
+    var PACKAGE_NAME = "/home/darko/Documents/GitHub/breakout/docs/index.data";
     var REMOTE_PACKAGE_BASE = "index.data";
     var REMOTE_PACKAGE_NAME = Module["locateFile"] ? Module["locateFile"](REMOTE_PACKAGE_BASE, "") : REMOTE_PACKAGE_BASE;
     var REMOTE_PACKAGE_SIZE = metadata["remote_package_size"];
@@ -179,9 +179,9 @@ Module["expectedDataFileDownloads"]++;
         for (var i = 0; i < files.length; ++i) {
           DataRequest.prototype.requests[files[i].filename].onload();
         }
-        Module["removeRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout-wasm/docs/index.data");
+        Module["removeRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout/docs/index.data");
       }
-      Module["addRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout-wasm/docs/index.data");
+      Module["addRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout/docs/index.data");
       Module["preloadResults"] ??= {};
       Module["preloadResults"][PACKAGE_NAME] = {
         fromCache: false
@@ -225,119 +225,123 @@ Module["expectedDataFileDownloads"]++;
       "start": 141095,
       "end": 141335
     }, {
-      "filename": "/Resources/script/main.wren",
+      "filename": "/Resources/script/demo.wren",
       "start": 141335,
-      "end": 141532
+      "end": 141380
+    }, {
+      "filename": "/Resources/script/main.wren",
+      "start": 141380,
+      "end": 141616
     }, {
       "filename": "/Resources/shaders/core/elementrender.fs",
-      "start": 141532,
-      "end": 141770
+      "start": 141616,
+      "end": 141854
     }, {
       "filename": "/Resources/shaders/core/elementrender.vs",
-      "start": 141770,
-      "end": 142090
+      "start": 141854,
+      "end": 142174
     }, {
       "filename": "/Resources/shaders/core/sprite.fs",
-      "start": 142090,
-      "end": 142280
+      "start": 142174,
+      "end": 142364
     }, {
       "filename": "/Resources/shaders/core/sprite.vs",
-      "start": 142280,
-      "end": 142548
+      "start": 142364,
+      "end": 142632
     }, {
       "filename": "/Resources/shaders/core/triangle.fs",
-      "start": 142548,
-      "end": 142648
+      "start": 142632,
+      "end": 142732
     }, {
       "filename": "/Resources/shaders/core/triangle.vs",
-      "start": 142648,
-      "end": 142803
+      "start": 142732,
+      "end": 142887
     }, {
       "filename": "/Resources/shaders/es/elementrender.fs",
-      "start": 142803,
-      "end": 143114
+      "start": 142887,
+      "end": 143198
     }, {
       "filename": "/Resources/shaders/es/elementrender.vs",
-      "start": 143114,
-      "end": 143432
+      "start": 143198,
+      "end": 143516
     }, {
       "filename": "/Resources/shaders/es/sprite.fs",
-      "start": 143432,
-      "end": 143695
+      "start": 143516,
+      "end": 143779
     }, {
       "filename": "/Resources/shaders/es/sprite.vs",
-      "start": 143695,
-      "end": 143961
+      "start": 143779,
+      "end": 144045
     }, {
       "filename": "/Resources/shaders/es/triangle.fs",
-      "start": 143961,
-      "end": 144071
+      "start": 144045,
+      "end": 144155
     }, {
       "filename": "/Resources/shaders/es/triangle.vs",
-      "start": 144071,
-      "end": 144243
+      "start": 144155,
+      "end": 144327
     }, {
       "filename": "/Resources/shaders/particle.frag",
-      "start": 144243,
-      "end": 144403
+      "start": 144327,
+      "end": 144487
     }, {
       "filename": "/Resources/shaders/particle.vs",
-      "start": 144403,
-      "end": 144761
+      "start": 144487,
+      "end": 144845
     }, {
       "filename": "/Resources/shaders/sprite.frag",
-      "start": 144761,
-      "end": 144933
+      "start": 144845,
+      "end": 145017
     }, {
       "filename": "/Resources/shaders/sprite.vs",
-      "start": 144933,
-      "end": 145183
+      "start": 145017,
+      "end": 145267
     }, {
       "filename": "/Resources/textures/awesomeface.png",
-      "start": 145183,
-      "end": 189187
+      "start": 145267,
+      "end": 189271
     }, {
       "filename": "/Resources/textures/background.jpg",
-      "start": 189187,
-      "end": 494499
+      "start": 189271,
+      "end": 494583
     }, {
       "filename": "/Resources/textures/background.png",
-      "start": 494499,
-      "end": 1811902
+      "start": 494583,
+      "end": 1811986
     }, {
       "filename": "/Resources/textures/block.png",
-      "start": 1811902,
-      "end": 1835189
+      "start": 1811986,
+      "end": 1835273
     }, {
       "filename": "/Resources/textures/block_solid.png",
-      "start": 1835189,
-      "end": 1883847
+      "start": 1835273,
+      "end": 1883931
     }, {
       "filename": "/Resources/textures/out.png",
-      "start": 1883847,
-      "end": 1888182
+      "start": 1883931,
+      "end": 1888266
     }, {
       "filename": "/Resources/textures/paddle - Copy.png",
-      "start": 1888182,
-      "end": 1921743
+      "start": 1888266,
+      "end": 1921827
     }, {
       "filename": "/Resources/textures/paddle.png",
-      "start": 1921743,
-      "end": 1940645
+      "start": 1921827,
+      "end": 1940729
     }, {
       "filename": "/Resources/textures/particle.png",
-      "start": 1940645,
-      "end": 1942030
+      "start": 1940729,
+      "end": 1942114
     }, {
       "filename": "/Resources/textures/particleb.png",
-      "start": 1942030,
-      "end": 1960942
+      "start": 1942114,
+      "end": 1961026
     } ],
-    "remote_package_size": 1960942
+    "remote_package_size": 1961026
   });
 })();
 
-// end include: /tmp/tmpihak8kbs.js
+// end include: /tmp/tmp31e20yhm.js
 // Sometimes an existing Module object exists with properties
 // meant to overwrite the default module functionality. Here
 // we collect those properties and reapply _after_ we configure

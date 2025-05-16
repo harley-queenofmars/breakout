@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.6)
 project(breakout)
 set ( VERSION 0.0.1 )
 set ( RELEASE_NAME breakout )
