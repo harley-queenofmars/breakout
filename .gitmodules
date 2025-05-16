@@ -1,0 +1,6 @@
+[submodule "external/blocksruntime"]
+	path = external/blocksruntime
+	url = https://github.com/mackyle/blocksruntime.git
+[submodule "external/stb"]
+	path = external/stb
+	url = https://github.com/nothings/stb.git

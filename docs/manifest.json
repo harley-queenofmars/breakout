@@ -1,0 +1,18 @@
+{
+    "name":"Breakout",
+    "short_name":"Breakout",
+    "start_url":"index.html",
+    "display":"standalone",
+    "background_color":"#222034",
+    "theme_color":"black",
+    "scope": ".",
+    "description":"Breakout for WASM",
+    "orientation": "portrait-primary",
+    "icons":[
+      {
+      "src":"Breakout.png",                    
+      "sizes":"256x256",
+      "type":"image/png"
+      }
+    ]
+}

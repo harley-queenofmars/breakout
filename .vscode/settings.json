@@ -1,0 +1,7 @@
+{
+    "cmake.additionalKits": [
+        "{     \"name\": \"Emscripten\",     \"toolchainFile\": \"/home/darko/Documents/GitHub/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\",     \"compilers\": {       \"C\": \"/home/darko/Documents/GitHub/emsdk/upstream/emscripten/emcc\",       \"CXX\": \"/home/darko/Documents/GitHub/emsdk/upstream/emscripten/em++\"     }   }"
+    ],
+    "makefile.configureOnOpen": false,
+    "clangd.path": "/usr/bin/clangd-19",
+}

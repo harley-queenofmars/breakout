@@ -1,0 +1,13 @@
+set(SOURCE
+   ${SOURCE}
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_compiler.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_core.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_debug.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/optional/wren_opt_meta.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/optional/wren_opt_random.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_primitive.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_utils.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_value.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/vm/wren_vm.c
+   PARENT_SCOPE
+)
