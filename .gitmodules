@@ -7,3 +7,9 @@
 [submodule "external/wren"]
 	path = external/wren
 	url = https://github.com/wren-lang/wren-cli.git
+[submodule "external/corefw"]
+	path = external/corefw
+	url = https://github.com/harley-queenofmars/corefw.git
+[submodule "external/corefx"]
+	path = external/corefx
+	url = https://github.com/harley-queenofmars/corefx.git
