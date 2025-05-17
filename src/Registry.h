@@ -9,7 +9,7 @@
 WrenLoadModuleResult loadBuiltInModule(const char* module);
 void loadModuleComplete(WrenVM* vm, const char* name, struct WrenLoadModuleResult result);
 
-// Looks up a foreign method in a built-in module.
+// Looks up a foreign proc in a built-in module.
 //
 // Returns `NULL` if [moduleName] is not a built-in module.
 WrenForeignMethodFn bindBuiltInForeignMethod(

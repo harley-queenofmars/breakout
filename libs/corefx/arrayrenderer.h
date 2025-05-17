@@ -21,18 +21,18 @@ typedef struct __CFXArrayRenderer {
     GLuint VAO;
 } __CFXArrayRenderer;
 
-extern method void* Ctor(
+extern proc void* Ctor(
     CFXArrayRendererRef this, 
     CFXShaderRef shader);
 
-extern method void Draw(
+extern proc void Draw(
     CFXArrayRendererRef this, 
     CFXTexture2DRef texture, 
     CFXRect* bounds, 
     GLfloat rotate, 
     Vec3 color);
 
-extern method void Draw(
+extern proc void Draw(
     CFXArrayRendererRef this, 
     CFXTexture2DRef texture, 
     Vec2 position, 

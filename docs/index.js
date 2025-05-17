@@ -31,7 +31,7 @@ if (ENVIRONMENT_IS_NODE) {}
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpra9rh1hl.js
+// include: /tmp/tmp_np6u6dt.js
 Module["expectedDataFileDownloads"] ??= 0;
 
 Module["expectedDataFileDownloads"]++;
@@ -50,7 +50,7 @@ Module["expectedDataFileDownloads"]++;
       // web worker
       PACKAGE_PATH = encodeURIComponent(location.pathname.substring(0, location.pathname.lastIndexOf("/")) + "/");
     }
-    var PACKAGE_NAME = "/home/darko/Documents/GitHub/breakout/docs/index.data";
+    var PACKAGE_NAME = "/home/darko/Documents/Projects/breakout/docs/index.data";
     var REMOTE_PACKAGE_BASE = "index.data";
     var REMOTE_PACKAGE_NAME = Module["locateFile"] ? Module["locateFile"](REMOTE_PACKAGE_BASE, "") : REMOTE_PACKAGE_BASE;
     var REMOTE_PACKAGE_SIZE = metadata["remote_package_size"];
@@ -179,9 +179,9 @@ Module["expectedDataFileDownloads"]++;
         for (var i = 0; i < files.length; ++i) {
           DataRequest.prototype.requests[files[i].filename].onload();
         }
-        Module["removeRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout/docs/index.data");
+        Module["removeRunDependency"]("datafile_/home/darko/Documents/Projects/breakout/docs/index.data");
       }
-      Module["addRunDependency"]("datafile_/home/darko/Documents/GitHub/breakout/docs/index.data");
+      Module["addRunDependency"]("datafile_/home/darko/Documents/Projects/breakout/docs/index.data");
       Module["preloadResults"] ??= {};
       Module["preloadResults"][PACKAGE_NAME] = {
         fromCache: false
@@ -341,7 +341,7 @@ Module["expectedDataFileDownloads"]++;
   });
 })();
 
-// end include: /tmp/tmpra9rh1hl.js
+// end include: /tmp/tmp_np6u6dt.js
 // Sometimes an existing Module object exists with properties
 // meant to overwrite the default module functionality. Here
 // we collect those properties and reapply _after_ we configure

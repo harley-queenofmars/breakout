@@ -50,12 +50,12 @@ void* Ctor(DemoRef this, char* title, int width, int height)
     return (void*)this;
 }
 
-method void Initialize(DemoRef this)
+proc void Initialize(DemoRef this)
 {
 }
 
 
-method void LoadContent(DemoRef this)
+proc void LoadContent(DemoRef this)
 {
 
     // Load shaders
@@ -91,7 +91,7 @@ method void LoadContent(DemoRef this)
     Ball = NewBallObject(ballPos, BALL_RADIUS, GetBallVelocity(this->script), GetTexture(ResourceManager, "face"));
 }
 
-method void Update(DemoRef this)
+proc void Update(DemoRef this)
 {
     // Update objects
     Move(Ball, this->delta, this->width);
@@ -132,7 +132,7 @@ method void Update(DemoRef this)
 
 }
 
-method void Draw(DemoRef this)
+proc void Draw(DemoRef this)
 {
     float r = 0.392156f;
     float g = 0.584313f;
@@ -156,7 +156,7 @@ method void Draw(DemoRef this)
     glfwPollEvents();
 }
 
-method void Run(DemoRef this)
+proc void Run(DemoRef this)
 {
     Run((CFXGameRef)this);
 }
@@ -165,7 +165,7 @@ method void Run(DemoRef this)
  * ResetLevel
  * Ctor
  */
-method void ResetLevel(DemoRef this)
+proc void ResetLevel(DemoRef this)
 {
     if (this->Level == 0) {
         GameLevelRef level = Get(this->Levels, 0);
@@ -187,7 +187,7 @@ method void ResetLevel(DemoRef this)
  * ResetPlayer
  * 
  */
-method void ResetPlayer(DemoRef this)
+proc void ResetPlayer(DemoRef this)
 {
     Player->Size = PLAYER_SIZE;
     Player->Position = (Vec2) { (int)(this->width / 2) - PLAYER_SIZE.x / 2, this->height - PLAYER_SIZE.y };
@@ -277,7 +277,7 @@ static CollisionRef CheckCollision(
  * DoCollisions
  * 
  */
-method void DoCollisions(DemoRef this)
+proc void DoCollisions(DemoRef this)
 {
     GameLevelRef level = Get(this->Levels, this->Level);
     CFArrayRef bricks = level->Bricks;

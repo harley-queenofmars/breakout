@@ -43,7 +43,7 @@ enum Slot : int {
 
 class(Wren);
 
-void* method Ctor(WrenRef this)
+void* proc Ctor(WrenRef this)
 {
 	this->vm = wrenNewVM(&(WrenConfiguration){
 		.writeFn = &wrenWriteFn,
@@ -92,23 +92,23 @@ void* method Ctor(WrenRef this)
     return this;
 }
 
-method const char* GetName(WrenRef this)
+proc const char* GetName(WrenRef this)
 {
     return wrenGetSlotString(this->vm, SlotName);
 }
 
-method double GetVersion(WrenRef this)
+proc double GetVersion(WrenRef this)
 {
 	return wrenGetSlotDouble(this->vm, SlotVersion);
 }
 
-method double GetPlayerVelocity(WrenRef this)
+proc double GetPlayerVelocity(WrenRef this)
 {
 	wrenSetSlotHandle(this->vm, SlotPlayerVelocity, this->playerVelocity);
 	return wrenGetSlotDouble(this->vm, SlotPlayerVelocity);
 }
 
-method Vec2 GetBallVelocity(WrenRef this)
+proc Vec2 GetBallVelocity(WrenRef this)
 {
 	wrenSetSlotHandle(this->vm, SlotX, this->ballVelocityX);
 	wrenSetSlotHandle(this->vm, SlotY, this->ballVelocityY);

@@ -18,7 +18,7 @@ class(Collision);
  * @param dir direction from
  * @param Vec2 difference point
  */
-method void* Ctor(CollisionRef this, bool isTrue, Direction dir, Vec2 vec)
+proc void* Ctor(CollisionRef this, bool isTrue, Direction dir, Vec2 vec)
 {
     this->IsTrue = isTrue;
     this->Dir = dir;

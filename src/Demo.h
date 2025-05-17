@@ -77,25 +77,25 @@ extern void* Ctor(
     int width, 
     int height);
 
-extern method void SetKey(
+extern proc void SetKey(
     DemoRef this, 
     int key, 
     bool value);
 
-extern method void SetState(
+extern proc void SetState(
     DemoRef this, 
     GameState state);
     
-extern method void Initialize(DemoRef this);
-extern method void LoadContent(DemoRef this);
-extern method void Update(DemoRef this);
-extern method void Draw(DemoRef this);
-extern method void Run(DemoRef this);
-extern method void Start(DemoRef this);
-extern method void ResetLevel(DemoRef this);
-extern method void ResetPlayer(DemoRef this);
-extern method void Dispose(DemoRef this);
-extern method void DoCollisions(DemoRef this);
+extern proc void Initialize(DemoRef this);
+extern proc void LoadContent(DemoRef this);
+extern proc void Update(DemoRef this);
+extern proc void Draw(DemoRef this);
+extern proc void Run(DemoRef this);
+extern proc void Start(DemoRef this);
+extern proc void ResetLevel(DemoRef this);
+extern proc void ResetPlayer(DemoRef this);
+extern proc void Dispose(DemoRef this);
+extern proc void DoCollisions(DemoRef this);
 
 static inline DemoRef NewDemo(char* title, int width, int height)
 {

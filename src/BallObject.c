@@ -19,7 +19,7 @@ class(BallObject);
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-method void* Ctor(
+proc void* Ctor(
     BallObjectRef this,
     Vec2 Position,
     float Radius,
@@ -40,7 +40,7 @@ method void* Ctor(
  * 
  * @param renderer to draw sprite with
  */
-method void Draw(BallObjectRef this, CFXArrayRendererRef renderer)
+proc void Draw(BallObjectRef this, CFXArrayRendererRef renderer)
 {
     CFXRect bounds = { this->Position.x, this->Position.y,
         this->Size.x, this->Size.y };
@@ -55,7 +55,7 @@ method void Draw(BallObjectRef this, CFXArrayRendererRef renderer)
  * @param window_width
  * @returns Vec2 new position
  */
-method void Move(BallObjectRef this, GLfloat dt, GLuint window_width)
+proc void Move(BallObjectRef this, GLfloat dt, GLuint window_width)
 {
     // If not stuck to player board
     if (!this->Stuck) {
@@ -83,7 +83,7 @@ method void Move(BallObjectRef this, GLfloat dt, GLuint window_width)
  * @param velocity to reset to
  * 
  */
-method void Reset(BallObjectRef this, Vec2 position, Vec2 velocity)
+proc void Reset(BallObjectRef this, Vec2 position, Vec2 velocity)
 {
     this->Position = position;
     this->Velocity = velocity;
@@ -93,7 +93,7 @@ method void Reset(BallObjectRef this, Vec2 position, Vec2 velocity)
 /**
  * ToString
  */
-method char* ToString(BallObjectRef this)
+proc char* ToString(BallObjectRef this)
 {
     return "BallObject";
 }

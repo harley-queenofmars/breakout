@@ -27,11 +27,11 @@ typedef struct __Particle {
     GLfloat Life;
 } __Particle;
 
-extern method void* Ctor(
+extern proc void* Ctor(
     ParticleRef this, 
     CFXShaderRef shader, 
     CFXTexture2DRef texture, 
     int amount);
 
-extern method char* ToString(
+extern proc char* ToString(
     ParticleRef this);

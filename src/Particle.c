@@ -17,7 +17,7 @@ class(Particle);
  * @param dir direction from
  * @param Vec2 difference point
  */
-method void* Ctor(ParticleRef this, Vec2 position, Vec2 velocity, Vec4 color, GLfloat life)
+proc void* Ctor(ParticleRef this, Vec2 position, Vec2 velocity, Vec4 color, GLfloat life)
 {
     this->Color = color;
     this->Life = life;

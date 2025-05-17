@@ -1,6 +1,6 @@
 #include "Registry.h"
 
-// Describes one foreign method in a class.
+// Describes one foreign proc in a class.
 typedef struct
 {
   bool isStatic;

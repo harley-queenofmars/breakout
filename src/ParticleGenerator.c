@@ -19,7 +19,7 @@ class(ParticleGenerator);
  * @param amount number of particles to generate
  * 
  */
-method void* Ctor(
+proc void* Ctor(
     ParticleGeneratorRef this,
     CFXShaderRef shader,
     CFXTexture2DRef texture,
@@ -40,7 +40,7 @@ method void* Ctor(
  * @param offset to display from
  * 
  */
-method void Update(
+proc void Update(
     ParticleGeneratorRef this,
     GLfloat dt,
     GameObjectRef object,
@@ -67,7 +67,7 @@ method void Update(
  * Render all particles
  * 
  */
-method void Draw(ParticleGeneratorRef this)
+proc void Draw(ParticleGeneratorRef this)
 {
     // Use additive blending to give it a 'glow' effect
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -90,7 +90,7 @@ method void Draw(ParticleGeneratorRef this)
 /**
  * initialize generator
  */
-method void init(ParticleGeneratorRef this)
+proc void init(ParticleGeneratorRef this)
 {
     // Set up mesh and attribute properties
     GLuint VBO;
@@ -119,7 +119,7 @@ method void init(ParticleGeneratorRef this)
 
 // Stores the index of the last particle used (for quick access to next dead particle)
 static GLuint lastUsedParticle = 0;
-method GLuint firstUnused(ParticleGeneratorRef this)
+proc GLuint firstUnused(ParticleGeneratorRef this)
 {
     // First search from last used particle, this will usually return almost instantly
     for (GLuint i = lastUsedParticle; i < this->amount; ++i) {
@@ -140,7 +140,7 @@ method GLuint firstUnused(ParticleGeneratorRef this)
     return 0;
 }
 
-method void respawn(
+proc void respawn(
     ParticleGeneratorRef this,
     ParticleRef particle,
     GameObjectRef object,
@@ -157,7 +157,7 @@ method void respawn(
 /**
  * ToString
  */
-method char* ToString(ParticleGeneratorRef this)
+proc char* ToString(ParticleGeneratorRef this)
 {
     return "ParticleGenerator";
 }

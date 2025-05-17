@@ -34,7 +34,7 @@ typedef struct __GameObject {
     char* Name;
 } __GameObject;
 
-extern method GameObjectRef Ctor(
+extern proc GameObjectRef Ctor(
     GameObjectRef this, 
     char* name, 
     Vec2 Position, 
@@ -42,11 +42,11 @@ extern method GameObjectRef Ctor(
     CFXTexture2DRef Sprite, 
     Vec3 Color);
 
-extern method void Draw(
+extern proc void Draw(
     GameObjectRef this, 
     CFXArrayRendererRef renderer);
 
-extern method char* ToString(
+extern proc char* ToString(
     GameObjectRef this);
 
 static inline GameObjectRef NewGameObject(char* name, Vec2 Position, Vec2 Size, CFXTexture2DRef Sprite, Vec3 Color)

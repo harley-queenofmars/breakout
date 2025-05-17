@@ -26,13 +26,13 @@ typedef struct __Wren {
     } __Wren;
 
 
-extern method void* Ctor(
+extern proc void* Ctor(
     WrenRef this);
 
-extern method const char* GetName(WrenRef this);
-extern method double GetVersion(WrenRef this);
-extern method double GetPlayerVelocity(WrenRef this);
-extern method Vec2 GetBallVelocity(WrenRef this);
+extern proc const char* GetName(WrenRef this);
+extern proc double GetVersion(WrenRef this);
+extern proc double GetPlayerVelocity(WrenRef this);
+extern proc Vec2 GetBallVelocity(WrenRef this);
 
 static inline WrenRef NewWren()
 {

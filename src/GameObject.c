@@ -25,7 +25,7 @@ class(GameObject);
  * @param Sprite to display
  * @param Color tiniting color
  */
-method GameObjectRef Ctor(
+proc GameObjectRef Ctor(
     GameObjectRef this,
     char* name,
     Vec2 Position,
@@ -50,7 +50,7 @@ method GameObjectRef Ctor(
  * 
  * @param renderer to draw sprite with
  */
-method void Draw(
+proc void Draw(
     GameObjectRef this,
     CFXArrayRendererRef renderer)
 {
@@ -60,7 +60,7 @@ method void Draw(
 /**
  * ToString
  */
-method char* ToString(GameObjectRef this)
+proc char* ToString(GameObjectRef this)
 {
     return "GameObject";
 }

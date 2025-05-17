@@ -26,7 +26,7 @@ class(GameLevel);
 /**
  * GameLevel
  */
-method GameLevelRef Ctor(
+proc GameLevelRef Ctor(
     GameLevelRef this,
     GLchar* file,
     int levelWidth,
@@ -45,7 +45,7 @@ method GameLevelRef Ctor(
  * @param levelHeight of level in tiles
  * 
  */
-method GameLevelRef Load(
+proc GameLevelRef Load(
     GameLevelRef this,
     GLchar* file,
     int levelWidth,
@@ -101,7 +101,7 @@ method GameLevelRef Load(
  * @param renderer to use
  * 
  */
-method void Draw(
+proc void Draw(
     GameLevelRef this,
     CFXArrayRendererRef renderer)
 {
@@ -118,7 +118,7 @@ method void Draw(
  * @returns true when complete
  * 
  */
-method bool IsCompleted(GameLevelRef this)
+proc bool IsCompleted(GameLevelRef this)
 {
     for (int i = 0; i < Length(this->Bricks); i++) {
         GameObjectRef tile = CFArrayGet(this->Bricks, i);
@@ -136,7 +136,7 @@ method bool IsCompleted(GameLevelRef this)
  * @param levelHeight of level in tiles
  *  
  */
-method void init(
+proc void init(
     GameLevelRef this,
     CFArrayRef tileData,
     int levelWidth,
@@ -196,7 +196,7 @@ method void init(
 /**
  * ToString
  */
-method char* ToString(GameLevelRef this)
+proc char* ToString(GameLevelRef this)
 {
     return "GameLevel";
 }

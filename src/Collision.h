@@ -34,13 +34,13 @@ typedef struct __Collision {
     Vec2 Vec;
 } __Collision;
 
-extern method void* Ctor(
+extern proc void* Ctor(
     CollisionRef this, 
     bool first, 
     Direction second, 
     Vec2 third);
 
-extern method char* ToString(
+extern proc char* ToString(
     CollisionRef this);
 
 static inline CollisionRef NewCollision(bool first, Direction second, Vec2 third)
