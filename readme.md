@@ -33,3 +33,7 @@ git config --local user.email "harley.queenofmars@gmail.com"
 git submodule add -f https://github.com/wren-lang/wren-cli.git external/wren
 git submodule add -f https://github.com/mackyle/blocksruntime.git external/blocksruntime
 git submodule add -f https://github.com/nothings/stb.git external/stb
+
+
+git submodule add -f https://github.com/harley-queenofmars/corefw.git external/corefw
+git submodule add -f https://github.com/harley-queenofmars/corefx.git external/corefx

@@ -8,8 +8,8 @@ set ( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs)
 
-add_subdirectory ( libs/corefw )
-add_subdirectory ( libs/corefx )
+add_subdirectory ( external/corefw )
+add_subdirectory ( external/corefx )
 
 add_executable( ${APP_NAME} 
     src/main.c 
