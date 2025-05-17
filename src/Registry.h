@@ -1,8 +1,8 @@
 // This wires up all of the foreign classes and methods defined by the built-in
 // modules bundled with the CLI.
 #pragma once
-#include "../libs/corefx/corefx.h"      // IWYU pragma: keep
-#include "../libs/corefw/corefw.h"      // IWYU pragma: keep
+#include <corefx.h>      // IWYU pragma: keep
+#include <corefw.h>      // IWYU pragma: keep
 #include "wren.h"					    // IWYU pragma: keep
 	
 // Returns the source for built-in module [name].

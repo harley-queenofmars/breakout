@@ -34,6 +34,8 @@ add_executable( ${APP_NAME}
     ${SOURCE} )
 
 include_directories( external/stb )
+include_directories( external/corefw/src )
+include_directories( external/corefx/src )
 include_directories( external/wren/deps/wren/include )
 include_directories( external/wren/deps/wren/src/vm )
 include_directories( external/wren/deps/wren/src/optional )

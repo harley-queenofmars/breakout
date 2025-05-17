@@ -11,8 +11,8 @@
 #define GL_GLEXT_PROTOTYPES
 #define EGL_EGLEXT_PROTOTYPES
 #include <GLFW/glfw3.h>
-#include "../libs/corefw/corefw.h"      // IWYU pragma: keep
-#include "../libs/corefx/corefx.h"      // IWYU pragma: keep
+#include <corefw.h>      // IWYU pragma: keep
+#include <corefx.h>      // IWYU pragma: keep
 
 extern CFClassRef Particle;
 

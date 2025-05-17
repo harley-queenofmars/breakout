@@ -1,4 +1,4 @@
-#include "../libs/corefw/corefw.h"      // IWYU pragma: keep
+#include <corefw.h>      // IWYU pragma: keep
 #include "Demo.h"
 
 
