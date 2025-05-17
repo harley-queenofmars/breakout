@@ -144,8 +144,11 @@ void wrenErrorFn(WrenVM* vm,
 WrenLoadModuleResult wrenLoadModuleFn(WrenVM* vm, 
 	const char* name)
 {
-	CFStringRef path = NewString(CFStringJoin(3, "Reources/script/", name, ",wren"));
+	CFStringRef path = NewString((char*)name);
+	printf("%s\n", cstr(path));
+
 	CFStringRef text = CFFS.readTextFile(cstr(path));
+	printf("%s\n", cstr(text));
 
 	return (WrenLoadModuleResult){
 		.source = cstr(text)
@@ -173,5 +176,7 @@ const char* wrenResolveModuleFn(WrenVM* vm,
     const char* importer, 
 	const char* name)
 {
-	return nullptr;
+	CFStringRef path = NewString(CFStringJoin(3, "Resources/script", name, ".wren"));
+	printf("%s\n", cstr(path));
+	return cstr(path);
 }

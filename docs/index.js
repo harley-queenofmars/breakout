@@ -31,7 +31,7 @@ if (ENVIRONMENT_IS_NODE) {}
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmp31e20yhm.js
+// include: /tmp/tmpra9rh1hl.js
 Module["expectedDataFileDownloads"] ??= 0;
 
 Module["expectedDataFileDownloads"]++;
@@ -227,121 +227,121 @@ Module["expectedDataFileDownloads"]++;
     }, {
       "filename": "/Resources/script/demo.wren",
       "start": 141335,
-      "end": 141380
+      "end": 141409
     }, {
       "filename": "/Resources/script/main.wren",
-      "start": 141380,
-      "end": 141616
+      "start": 141409,
+      "end": 141670
     }, {
       "filename": "/Resources/shaders/core/elementrender.fs",
-      "start": 141616,
-      "end": 141854
+      "start": 141670,
+      "end": 141908
     }, {
       "filename": "/Resources/shaders/core/elementrender.vs",
-      "start": 141854,
-      "end": 142174
+      "start": 141908,
+      "end": 142228
     }, {
       "filename": "/Resources/shaders/core/sprite.fs",
-      "start": 142174,
-      "end": 142364
+      "start": 142228,
+      "end": 142418
     }, {
       "filename": "/Resources/shaders/core/sprite.vs",
-      "start": 142364,
-      "end": 142632
+      "start": 142418,
+      "end": 142686
     }, {
       "filename": "/Resources/shaders/core/triangle.fs",
-      "start": 142632,
-      "end": 142732
+      "start": 142686,
+      "end": 142786
     }, {
       "filename": "/Resources/shaders/core/triangle.vs",
-      "start": 142732,
-      "end": 142887
+      "start": 142786,
+      "end": 142941
     }, {
       "filename": "/Resources/shaders/es/elementrender.fs",
-      "start": 142887,
-      "end": 143198
+      "start": 142941,
+      "end": 143252
     }, {
       "filename": "/Resources/shaders/es/elementrender.vs",
-      "start": 143198,
-      "end": 143516
+      "start": 143252,
+      "end": 143570
     }, {
       "filename": "/Resources/shaders/es/sprite.fs",
-      "start": 143516,
-      "end": 143779
+      "start": 143570,
+      "end": 143833
     }, {
       "filename": "/Resources/shaders/es/sprite.vs",
-      "start": 143779,
-      "end": 144045
+      "start": 143833,
+      "end": 144099
     }, {
       "filename": "/Resources/shaders/es/triangle.fs",
-      "start": 144045,
-      "end": 144155
+      "start": 144099,
+      "end": 144209
     }, {
       "filename": "/Resources/shaders/es/triangle.vs",
-      "start": 144155,
-      "end": 144327
+      "start": 144209,
+      "end": 144381
     }, {
       "filename": "/Resources/shaders/particle.frag",
-      "start": 144327,
-      "end": 144487
+      "start": 144381,
+      "end": 144541
     }, {
       "filename": "/Resources/shaders/particle.vs",
-      "start": 144487,
-      "end": 144845
+      "start": 144541,
+      "end": 144899
     }, {
       "filename": "/Resources/shaders/sprite.frag",
-      "start": 144845,
-      "end": 145017
+      "start": 144899,
+      "end": 145071
     }, {
       "filename": "/Resources/shaders/sprite.vs",
-      "start": 145017,
-      "end": 145267
+      "start": 145071,
+      "end": 145321
     }, {
       "filename": "/Resources/textures/awesomeface.png",
-      "start": 145267,
-      "end": 189271
+      "start": 145321,
+      "end": 189325
     }, {
       "filename": "/Resources/textures/background.jpg",
-      "start": 189271,
-      "end": 494583
+      "start": 189325,
+      "end": 494637
     }, {
       "filename": "/Resources/textures/background.png",
-      "start": 494583,
-      "end": 1811986
+      "start": 494637,
+      "end": 1812040
     }, {
       "filename": "/Resources/textures/block.png",
-      "start": 1811986,
-      "end": 1835273
+      "start": 1812040,
+      "end": 1835327
     }, {
       "filename": "/Resources/textures/block_solid.png",
-      "start": 1835273,
-      "end": 1883931
+      "start": 1835327,
+      "end": 1883985
     }, {
       "filename": "/Resources/textures/out.png",
-      "start": 1883931,
-      "end": 1888266
+      "start": 1883985,
+      "end": 1888320
     }, {
       "filename": "/Resources/textures/paddle - Copy.png",
-      "start": 1888266,
-      "end": 1921827
+      "start": 1888320,
+      "end": 1921881
     }, {
       "filename": "/Resources/textures/paddle.png",
-      "start": 1921827,
-      "end": 1940729
+      "start": 1921881,
+      "end": 1940783
     }, {
       "filename": "/Resources/textures/particle.png",
-      "start": 1940729,
-      "end": 1942114
+      "start": 1940783,
+      "end": 1942168
     }, {
       "filename": "/Resources/textures/particleb.png",
-      "start": 1942114,
-      "end": 1961026
+      "start": 1942168,
+      "end": 1961080
     } ],
-    "remote_package_size": 1961026
+    "remote_package_size": 1961080
   });
 })();
 
-// end include: /tmp/tmp31e20yhm.js
+// end include: /tmp/tmpra9rh1hl.js
 // Sometimes an existing Module object exists with properties
 // meant to overwrite the default module functionality. Here
 // we collect those properties and reapply _after_ we configure
