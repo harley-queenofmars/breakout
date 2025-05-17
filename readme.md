@@ -26,3 +26,10 @@ https://thephd.dev/c23-is-coming-here-is-what-is-on-the-menu
 
 git config --local user.name "harley-queenofmars"
 git config --local user.email "harley.queenofmars@gmail.com"
+
+
+
+
+git submodule add -f https://github.com/wren-lang/wren-cli.git external/wren
+git submodule add -f https://github.com/mackyle/blocksruntime.git external/blocksruntime
+git submodule add -f https://github.com/nothings/stb.git external/stb
