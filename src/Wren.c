@@ -1,5 +1,6 @@
 #include "Wren.h"
 #include "wren.h"
+#include <stdio.h>
 
 void getConfig();
 static void wrenWriteFn(WrenVM* vm, 

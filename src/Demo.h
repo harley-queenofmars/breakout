@@ -22,6 +22,14 @@ typedef enum {
 
 
 typedef struct __Demo {
+    /**
+     * @brief Represents a Core Foundation object.
+     *
+     * This type is typically used as a generic handle or reference to a Core Foundation object,
+     * allowing for manipulation and management of various CF types in a platform-agnostic way.
+     * The actual definition and usage may depend on the platform and the specific Core Foundation
+     * APIs being interfaced with.
+     */
     __CFObject obj;
     void* subclass;
     CFXGameVtblRef  virtual;

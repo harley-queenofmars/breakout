@@ -112,7 +112,9 @@ canvas {
 <body>
 
     <!-- Create the canvas that the C++ code will draw into -->
+    <div id='d1' style="position:absolute; top: 100px; left:50%; transform: translate(-50%, 0%); z-index:1">  
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    </div>
 
     <!-- Allow the C++ to access the canvas element --> 
     <script type='text/javascript'>

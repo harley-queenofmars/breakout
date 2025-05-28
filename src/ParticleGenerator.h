@@ -16,6 +16,14 @@
 #include "GameObject.h"
 #include "Particle.h"
 
+/**
+ * @brief An external reference to a Core Foundation class object for particle generation.
+ *
+ * This variable provides access to the ParticleGenerator class reference,
+ * which can be used for creating and managing particle generator instances.
+ * 
+ * @note The actual definition and initialization of this reference should be provided elsewhere.
+ */
 extern CFClassRef ParticleGenerator;
 
 typedef struct __ParticleGenerator* ParticleGeneratorRef;
