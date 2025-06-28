@@ -1,3 +1,4 @@
 CompileFlags:                                   # Tweak the parse settings
+  Add: [-std=c23]                               # use C23 standard
   Remove: [--preload-file=*, --shell-file=*]    # ignore emscripten arguments
   

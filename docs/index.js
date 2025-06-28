@@ -23,15 +23,13 @@ var ENVIRONMENT_IS_WORKER = typeof WorkerGlobalScope != "undefined";
 
 // N.b. Electron.js environment is simultaneously a NODE-environment, but
 // also a web environment.
-var ENVIRONMENT_IS_NODE = typeof process == "object" && typeof process.versions == "object" && typeof process.versions.node == "string" && process.type != "renderer";
+var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 
 var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONMENT_IS_WORKER;
 
-if (ENVIRONMENT_IS_NODE) {}
-
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpc9caf5n3.js
+// include: /var/tmp/tmp28bf7hmy.js
 Module["expectedDataFileDownloads"] ??= 0;
 
 Module["expectedDataFileDownloads"]++;
@@ -50,7 +48,7 @@ Module["expectedDataFileDownloads"]++;
       // web worker
       PACKAGE_PATH = encodeURIComponent(location.pathname.substring(0, location.pathname.lastIndexOf("/")) + "/");
     }
-    var PACKAGE_NAME = "/home/darko/Documents/Projects/breakout/docs/index.data";
+    var PACKAGE_NAME = "../docs/index.data";
     var REMOTE_PACKAGE_BASE = "index.data";
     var REMOTE_PACKAGE_NAME = Module["locateFile"] ? Module["locateFile"](REMOTE_PACKAGE_BASE, "") : REMOTE_PACKAGE_BASE;
     var REMOTE_PACKAGE_SIZE = metadata["remote_package_size"];
@@ -179,9 +177,9 @@ Module["expectedDataFileDownloads"]++;
         for (var i = 0; i < files.length; ++i) {
           DataRequest.prototype.requests[files[i].filename].onload();
         }
-        Module["removeRunDependency"]("datafile_/home/darko/Documents/Projects/breakout/docs/index.data");
+        Module["removeRunDependency"]("datafile_../docs/index.data");
       }
-      Module["addRunDependency"]("datafile_/home/darko/Documents/Projects/breakout/docs/index.data");
+      Module["addRunDependency"]("datafile_../docs/index.data");
       Module["preloadResults"] ??= {};
       Module["preloadResults"][PACKAGE_NAME] = {
         fromCache: false
@@ -341,14 +339,7 @@ Module["expectedDataFileDownloads"]++;
   });
 })();
 
-// end include: /tmp/tmpc9caf5n3.js
-// Sometimes an existing Module object exists with properties
-// meant to overwrite the default module functionality. Here
-// we collect those properties and reapply _after_ we configure
-// the current environment's defaults to avoid having to be so
-// defensive during initialization.
-var moduleOverrides = Object.assign({}, Module);
-
+// end include: /var/tmp/tmp28bf7hmy.js
 var arguments_ = [];
 
 var thisProgram = "./this.program";
@@ -356,6 +347,17 @@ var thisProgram = "./this.program";
 var quit_ = (status, toThrow) => {
   throw toThrow;
 };
+
+// In MODULARIZE mode _scriptName needs to be captured already at the very top of the page immediately when the page is parsed, so it is generated there
+// before the page load. In non-MODULARIZE modes generate it here.
+var _scriptName = typeof document != "undefined" ? document.currentScript?.src : undefined;
+
+if (typeof __filename != "undefined") {
+  // Node
+  _scriptName = __filename;
+} else if (ENVIRONMENT_IS_WORKER) {
+  _scriptName = self.location.href;
+}
 
 // `/` should be present at the end if `scriptDirectory` is not empty
 var scriptDirectory = "";
@@ -374,7 +376,6 @@ if (ENVIRONMENT_IS_NODE) {
   // These modules will usually be used on Node.js. Load them eagerly to avoid
   // the complexity of lazy-loading.
   var fs = require("fs");
-  var nodePath = require("path");
   scriptDirectory = __dirname + "/";
   // include: node_shell_read.js
   readBinary = filename => {
@@ -390,10 +391,11 @@ if (ENVIRONMENT_IS_NODE) {
     return ret;
   };
   // end include: node_shell_read.js
-  if (!Module["thisProgram"] && process.argv.length > 1) {
+  if (process.argv.length > 1) {
     thisProgram = process.argv[1].replace(/\\/g, "/");
   }
   arguments_ = process.argv.slice(2);
+  // MODULARIZE will export the module in the proper place outside, we don't need to export here
   if (typeof module != "undefined") {
     module["exports"] = Module;
   }
@@ -405,24 +407,9 @@ if (ENVIRONMENT_IS_NODE) {
 // Node.js workers are detected as a combination of ENVIRONMENT_IS_WORKER and
 // ENVIRONMENT_IS_NODE.
 if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
-  if (ENVIRONMENT_IS_WORKER) {
-    // Check worker, not web, since window could be polyfilled
-    scriptDirectory = self.location.href;
-  } else if (typeof document != "undefined" && document.currentScript) {
-    // web
-    scriptDirectory = document.currentScript.src;
-  }
-  // blob urls look like blob:http://site.com/etc/etc and we cannot infer anything from them.
-  // otherwise, slice off the final part of the url to find the script directory.
-  // if scriptDirectory does not contain a slash, lastIndexOf will return -1,
-  // and scriptDirectory will correctly be replaced with an empty string.
-  // If scriptDirectory contains a query (starting with ?) or a fragment (starting with #),
-  // they are removed because they could contain a slash.
-  if (scriptDirectory.startsWith("blob:")) {
-    scriptDirectory = "";
-  } else {
-    scriptDirectory = scriptDirectory.slice(0, scriptDirectory.replace(/[?#].*/, "").lastIndexOf("/") + 1);
-  }
+  try {
+    scriptDirectory = new URL(".", _scriptName).href;
+  } catch {}
   {
     // include: web_or_worker_shell_read.js
     if (ENVIRONMENT_IS_WORKER) {
@@ -467,26 +454,10 @@ if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
   }
 } else {}
 
-var out = Module["print"] || console.log.bind(console);
+var out = console.log.bind(console);
 
-var err = Module["printErr"] || console.error.bind(console);
+var err = console.error.bind(console);
 
-// Merge back in the overrides
-Object.assign(Module, moduleOverrides);
-
-// Free the object hierarchy contained in the overrides, this lets the GC
-// reclaim data used.
-moduleOverrides = null;
-
-// Emit code to handle expected values on the Module object. This applies Module.x
-// to the proper local x. This has two benefits: first, we only emit it if it is
-// expected to arrive, and second, by using a local everywhere else that can be
-// minified.
-if (Module["arguments"]) arguments_ = Module["arguments"];
-
-if (Module["thisProgram"]) thisProgram = Module["thisProgram"];
-
-// perform assertions in shell.js after we set up out() and err(), as otherwise if an assertion fails it cannot print the message
 // end include: shell.js
 // include: preamble.js
 // === Preamble library stuff ===
@@ -497,11 +468,9 @@ if (Module["thisProgram"]) thisProgram = Module["thisProgram"];
 // You can also build docs locally as HTML or other formats in site/
 // An online HTML version (which may be of a different version of Emscripten)
 //    is up at http://kripken.github.io/emscripten-site/docs/api_reference/preamble.js.html
-var wasmBinary = Module["wasmBinary"];
+var wasmBinary;
 
 // Wasm globals
-var wasmMemory;
-
 //========================================
 // Runtime essentials
 //========================================
@@ -527,42 +496,46 @@ var EXITSTATUS;
   }
 }
 
-// Memory management
-var HEAP, /** @type {!Int8Array} */ HEAP8, /** @type {!Uint8Array} */ HEAPU8, /** @type {!Int16Array} */ HEAP16, /** @type {!Uint16Array} */ HEAPU16, /** @type {!Int32Array} */ HEAP32, /** @type {!Uint32Array} */ HEAPU32, /** @type {!Float32Array} */ HEAPF32, /* BigInt64Array type is not correctly defined in closure
-/** not-@type {!BigInt64Array} */ HEAP64, /* BigUint64Array type is not correctly defined in closure
-/** not-t@type {!BigUint64Array} */ HEAPU64, /** @type {!Float64Array} */ HEAPF64;
-
-var runtimeInitialized = false;
-
 /**
  * Indicates whether filename is delivered via file protocol (as opposed to http/https)
  * @noinline
  */ var isFileURI = filename => filename.startsWith("file://");
 
-// include: runtime_shared.js
+// include: runtime_common.js
 // include: runtime_stack_check.js
 // end include: runtime_stack_check.js
 // include: runtime_exceptions.js
 // end include: runtime_exceptions.js
 // include: runtime_debug.js
 // end include: runtime_debug.js
-// include: memoryprofiler.js
-// end include: memoryprofiler.js
+// Memory management
+var wasmMemory;
+
+var /** @type {!Int8Array} */ HEAP8, /** @type {!Uint8Array} */ HEAPU8, /** @type {!Int16Array} */ HEAP16, /** @type {!Uint16Array} */ HEAPU16, /** @type {!Int32Array} */ HEAP32, /** @type {!Uint32Array} */ HEAPU32, /** @type {!Float32Array} */ HEAPF32, /** @type {!Float64Array} */ HEAPF64;
+
+// BigInt64Array type is not correctly defined in closure
+var /** not-@type {!BigInt64Array} */ HEAP64, /* BigUint64Array type is not correctly defined in closure
+/** not-@type {!BigUint64Array} */ HEAPU64;
+
+var runtimeInitialized = false;
+
 function updateMemoryViews() {
   var b = wasmMemory.buffer;
-  Module["HEAP8"] = HEAP8 = new Int8Array(b);
-  Module["HEAP16"] = HEAP16 = new Int16Array(b);
-  Module["HEAPU8"] = HEAPU8 = new Uint8Array(b);
-  Module["HEAPU16"] = HEAPU16 = new Uint16Array(b);
-  Module["HEAP32"] = HEAP32 = new Int32Array(b);
-  Module["HEAPU32"] = HEAPU32 = new Uint32Array(b);
-  Module["HEAPF32"] = HEAPF32 = new Float32Array(b);
-  Module["HEAPF64"] = HEAPF64 = new Float64Array(b);
-  Module["HEAP64"] = HEAP64 = new BigInt64Array(b);
-  Module["HEAPU64"] = HEAPU64 = new BigUint64Array(b);
+  HEAP8 = new Int8Array(b);
+  HEAP16 = new Int16Array(b);
+  HEAPU8 = new Uint8Array(b);
+  HEAPU16 = new Uint16Array(b);
+  HEAP32 = new Int32Array(b);
+  HEAPU32 = new Uint32Array(b);
+  HEAPF32 = new Float32Array(b);
+  HEAPF64 = new Float64Array(b);
+  HEAP64 = new BigInt64Array(b);
+  HEAPU64 = new BigUint64Array(b);
 }
 
-// end include: runtime_shared.js
+// include: memoryprofiler.js
+// end include: memoryprofiler.js
+// end include: runtime_common.js
 function preRun() {
   if (Module["preRun"]) {
     if (typeof Module["preRun"] == "function") Module["preRun"] = [ Module["preRun"] ];
@@ -570,26 +543,32 @@ function preRun() {
       addOnPreRun(Module["preRun"].shift());
     }
   }
+  // Begin ATPRERUNS hooks
   callRuntimeCallbacks(onPreRuns);
 }
 
 function initRuntime() {
   runtimeInitialized = true;
+  // Begin ATINITS hooks
   if (!Module["noFSInit"] && !FS.initialized) FS.init();
   TTY.init();
+  // End ATINITS hooks
   wasmExports["__wasm_call_ctors"]();
+  // Begin ATPOSTCTORS hooks
   FS.ignorePermissions = false;
 }
 
 function preMain() {}
 
 function postRun() {
+  // PThreads reuse the runtime from the main thread.
   if (Module["postRun"]) {
     if (typeof Module["postRun"] == "function") Module["postRun"] = [ Module["postRun"] ];
     while (Module["postRun"].length) {
       addOnPostRun(Module["postRun"].shift());
     }
   }
+  // Begin ATPOSTRUNS hooks
   callRuntimeCallbacks(onPostRuns);
 }
 
@@ -605,10 +584,6 @@ var runDependencies = 0;
 var dependenciesFulfilled = null;
 
 // overridden to take different actions when all run dependencies are fulfilled
-function getUniqueRunDependency(id) {
-  return id;
-}
-
 function addRunDependency(id) {
   runDependencies++;
   Module["monitorRunDependencies"]?.(runDependencies);
@@ -731,6 +706,7 @@ async function createWasm() {
     wasmMemory = wasmExports["memory"];
     updateMemoryViews();
     wasmTable = wasmExports["__indirect_function_table"];
+    assignWasmExports(wasmExports);
     removeRunDependency("wasm-instantiate");
     return wasmExports;
   }
@@ -754,8 +730,7 @@ async function createWasm() {
   if (Module["instantiateWasm"]) {
     return new Promise((resolve, reject) => {
       Module["instantiateWasm"](info, (mod, inst) => {
-        receiveInstance(mod, inst);
-        resolve(mod.exports);
+        resolve(receiveInstance(mod, inst));
       });
     });
   }
@@ -765,8 +740,8 @@ async function createWasm() {
   return exports;
 }
 
-// === Body ===
 // end include: preamble.js
+// Begin JS library code
 class ExitStatus {
   name="ExitStatus";
   constructor(status) {
@@ -784,11 +759,11 @@ var callRuntimeCallbacks = callbacks => {
 
 var onPostRuns = [];
 
-var addOnPostRun = cb => onPostRuns.unshift(cb);
+var addOnPostRun = cb => onPostRuns.push(cb);
 
 var onPreRuns = [];
 
-var addOnPreRun = cb => onPreRuns.unshift(cb);
+var addOnPreRun = cb => onPreRuns.push(cb);
 
 /**
      * @param {number} ptr
@@ -809,7 +784,7 @@ var addOnPreRun = cb => onPreRuns.unshift(cb);
     return HEAP32[((ptr) >>> 2) >>> 0];
 
    case "i64":
-    return HEAP64[((ptr) >>> 3)];
+    return HEAP64[((ptr) >>> 3) >>> 0];
 
    case "float":
     return HEAPF32[((ptr) >>> 2) >>> 0];
@@ -825,7 +800,7 @@ var addOnPreRun = cb => onPreRuns.unshift(cb);
   }
 }
 
-var noExitRuntime = Module["noExitRuntime"] || true;
+var noExitRuntime = true;
 
 /**
      * @param {number} ptr
@@ -851,7 +826,7 @@ var noExitRuntime = Module["noExitRuntime"] || true;
     break;
 
    case "i64":
-    HEAP64[((ptr) >>> 3)] = BigInt(value);
+    HEAP64[((ptr) >>> 3) >>> 0] = BigInt(value);
     break;
 
    case "float":
@@ -901,6 +876,7 @@ var UTF8Decoder = typeof TextDecoder != "undefined" ? new TextDecoder : undefine
   // (As a tiny code save trick, compare endPtr against endIdx using a negation,
   // so that undefined/NaN means Infinity)
   while (heapOrArray[endPtr] && !(endPtr >= endIdx)) ++endPtr;
+  // When using conditional TextDecoder, skip it for short strings as the overhead of the native call is not worth it.
   if (endPtr - idx > 16 && heapOrArray.buffer && UTF8Decoder) {
     return UTF8Decoder.decode(heapOrArray.subarray(idx, endPtr));
   }
@@ -1132,19 +1108,10 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
   var endIdx = outIdx + maxBytesToWrite - 1;
   // -1 for string null terminator.
   for (var i = 0; i < str.length; ++i) {
-    // Gotcha: charCodeAt returns a 16-bit word that is a UTF-16 encoded code
-    // unit, not a Unicode code point of the character! So decode
-    // UTF16->UTF32->UTF8.
-    // See http://unicode.org/faq/utf_bom.html#utf16-3
     // For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description
     // and https://www.ietf.org/rfc/rfc2279.txt
     // and https://tools.ietf.org/html/rfc3629
-    var u = str.charCodeAt(i);
-    // possibly a lead surrogate
-    if (u >= 55296 && u <= 57343) {
-      var u1 = str.charCodeAt(++i);
-      u = 65536 + ((u & 1023) << 10) | (u1 & 1023);
-    }
+    var u = str.codePointAt(i);
     if (u <= 127) {
       if (outIdx >= endIdx) break;
       heap[outIdx++ >>> 0] = u;
@@ -1163,6 +1130,9 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
       heap[outIdx++ >>> 0] = 128 | ((u >> 12) & 63);
       heap[outIdx++ >>> 0] = 128 | ((u >> 6) & 63);
       heap[outIdx++ >>> 0] = 128 | (u & 63);
+      // Gotcha: if codePoint is over 0xFFFF, it is represented as a surrogate pair in UTF-16.
+      // We need to manually skip over the second code unit for correct iteration.
+      i++;
     }
   }
   // Null-terminate the pointer to the buffer.
@@ -1343,12 +1313,6 @@ var TTY = {
   }
 };
 
-var zeroMemory = (address, size) => {
-  HEAPU8.fill(0, address, address + size);
-};
-
-var alignMemory = (size, alignment) => Math.ceil(size / alignment) * alignment;
-
 var mmapAlloc = size => {
   abort();
 };
@@ -1389,7 +1353,6 @@ var MEMFS = {
           llseek: MEMFS.stream_ops.llseek,
           read: MEMFS.stream_ops.read,
           write: MEMFS.stream_ops.write,
-          allocate: MEMFS.stream_ops.allocate,
           mmap: MEMFS.stream_ops.mmap,
           msync: MEMFS.stream_ops.msync
         }
@@ -1637,10 +1600,6 @@ var MEMFS = {
       }
       return position;
     },
-    allocate(stream, offset, length) {
-      MEMFS.expandFileStorage(stream.node, offset + length);
-      stream.node.usedBytes = Math.max(stream.node.usedBytes, offset + length);
-    },
     mmap(stream, length, position, prot, flags) {
       if (!FS.isFile(stream.node.mode)) {
         throw new FS.ErrnoError(43);
@@ -1690,11 +1649,11 @@ var asyncLoad = async url => {
   return new Uint8Array(arrayBuffer);
 };
 
-var FS_createDataFile = (parent, name, fileData, canRead, canWrite, canOwn) => {
-  FS.createDataFile(parent, name, fileData, canRead, canWrite, canOwn);
-};
+var FS_createDataFile = (...args) => FS.createDataFile(...args);
 
-var preloadPlugins = Module["preloadPlugins"] || [];
+var getUniqueRunDependency = id => id;
+
+var preloadPlugins = [];
 
 var FS_handledByPreloadPlugin = (byteArray, fullname, finish, onerror) => {
   // Ensure plugins are ready.
@@ -1774,6 +1733,9 @@ var FS = {
   currentPath: "/",
   initialized: false,
   ignorePermissions: true,
+  filesystems: null,
+  syncFSRequests: 0,
+  readFiles: {},
   ErrnoError: class {
     name="ErrnoError";
     // We set the `name` property to be able to identify `FS.ErrnoError`
@@ -1786,9 +1748,6 @@ var FS = {
       this.errno = errno;
     }
   },
-  filesystems: null,
-  syncFSRequests: 0,
-  readFiles: {},
   FSStream: class {
     shared={};
     get object() {
@@ -1882,7 +1841,12 @@ var FS = {
         }
         if (parts[i] === "..") {
           current_path = PATH.dirname(current_path);
-          current = current.parent;
+          if (FS.isRoot(current)) {
+            path = current_path + "/" + parts.slice(i + 1).join("/");
+            continue linkloop;
+          } else {
+            current = current.parent;
+          }
           continue;
         }
         current_path = PATH.join2(current_path, parts[i]);
@@ -2342,9 +2306,10 @@ var FS = {
   mkdirTree(path, mode) {
     var dirs = path.split("/");
     var d = "";
-    for (var i = 0; i < dirs.length; ++i) {
-      if (!dirs[i]) continue;
-      d += "/" + dirs[i];
+    for (var dir of dirs) {
+      if (!dir) continue;
+      if (d || PATH.isAbs(path)) d += "/";
+      d += dir;
       try {
         FS.mkdir(d, mode);
       } catch (e) {
@@ -2837,24 +2802,6 @@ var FS = {
     if (!seeking) stream.position += bytesWritten;
     return bytesWritten;
   },
-  allocate(stream, offset, length) {
-    if (FS.isClosed(stream)) {
-      throw new FS.ErrnoError(8);
-    }
-    if (offset < 0 || length <= 0) {
-      throw new FS.ErrnoError(28);
-    }
-    if ((stream.flags & 2097155) === 0) {
-      throw new FS.ErrnoError(8);
-    }
-    if (!FS.isFile(stream.node.mode) && !FS.isDir(stream.node.mode)) {
-      throw new FS.ErrnoError(43);
-    }
-    if (!stream.stream_ops.allocate) {
-      throw new FS.ErrnoError(138);
-    }
-    stream.stream_ops.allocate(stream, offset, length);
-  },
   mmap(stream, length, position, prot, flags) {
     // User requests writing to file (prot & PROT_WRITE != 0).
     // Checking if we have permissions to write to the file unless
@@ -2894,28 +2841,24 @@ var FS = {
     if (opts.encoding !== "utf8" && opts.encoding !== "binary") {
       throw new Error(`Invalid encoding type "${opts.encoding}"`);
     }
-    var ret;
     var stream = FS.open(path, opts.flags);
     var stat = FS.stat(path);
     var length = stat.size;
     var buf = new Uint8Array(length);
     FS.read(stream, buf, 0, length, 0);
     if (opts.encoding === "utf8") {
-      ret = UTF8ArrayToString(buf);
-    } else if (opts.encoding === "binary") {
-      ret = buf;
+      buf = UTF8ArrayToString(buf);
     }
     FS.close(stream);
-    return ret;
+    return buf;
   },
   writeFile(path, data, opts = {}) {
     opts.flags = opts.flags || 577;
     var stream = FS.open(path, opts.flags, opts.mode);
     if (typeof data == "string") {
-      var buf = new Uint8Array(lengthBytesUTF8(data) + 1);
-      var actualNumBytes = stringToUTF8Array(data, buf, 0, buf.length);
-      FS.write(stream, buf, 0, actualNumBytes, undefined, opts.canOwn);
-    } else if (ArrayBuffer.isView(data)) {
+      data = new Uint8Array(intArrayFromString(data, true));
+    }
+    if (ArrayBuffer.isView(data)) {
       FS.write(stream, data, 0, data.byteLength, undefined, opts.canOwn);
     } else {
       throw new Error("Unsupported data type");
@@ -3066,12 +3009,10 @@ var FS = {
     FS.initialized = false;
     // force-flush all streams, so we get musl std streams printed out
     // close all of our streams
-    for (var i = 0; i < FS.streams.length; i++) {
-      var stream = FS.streams[i];
-      if (!stream) {
-        continue;
+    for (var stream of FS.streams) {
+      if (stream) {
+        FS.close(stream);
       }
-      FS.close(stream);
     }
   },
   findObject(path, dontResolveLastLink) {
@@ -3130,7 +3071,9 @@ var FS = {
       var current = PATH.join2(parent, part);
       try {
         FS.mkdir(current);
-      } catch (e) {}
+      } catch (e) {
+        if (e.errno != 20) throw e;
+      }
       parent = current;
     }
     return current;
@@ -3429,19 +3372,19 @@ var SYSCALLS = {
     HEAP32[(((buf) + (12)) >>> 2) >>> 0] = stat.uid;
     HEAP32[(((buf) + (16)) >>> 2) >>> 0] = stat.gid;
     HEAP32[(((buf) + (20)) >>> 2) >>> 0] = stat.rdev;
-    HEAP64[(((buf) + (24)) >>> 3)] = BigInt(stat.size);
+    HEAP64[(((buf) + (24)) >>> 3) >>> 0] = BigInt(stat.size);
     HEAP32[(((buf) + (32)) >>> 2) >>> 0] = 4096;
     HEAP32[(((buf) + (36)) >>> 2) >>> 0] = stat.blocks;
     var atime = stat.atime.getTime();
     var mtime = stat.mtime.getTime();
     var ctime = stat.ctime.getTime();
-    HEAP64[(((buf) + (40)) >>> 3)] = BigInt(Math.floor(atime / 1e3));
+    HEAP64[(((buf) + (40)) >>> 3) >>> 0] = BigInt(Math.floor(atime / 1e3));
     HEAPU32[(((buf) + (48)) >>> 2) >>> 0] = (atime % 1e3) * 1e3 * 1e3;
-    HEAP64[(((buf) + (56)) >>> 3)] = BigInt(Math.floor(mtime / 1e3));
+    HEAP64[(((buf) + (56)) >>> 3) >>> 0] = BigInt(Math.floor(mtime / 1e3));
     HEAPU32[(((buf) + (64)) >>> 2) >>> 0] = (mtime % 1e3) * 1e3 * 1e3;
-    HEAP64[(((buf) + (72)) >>> 3)] = BigInt(Math.floor(ctime / 1e3));
+    HEAP64[(((buf) + (72)) >>> 3) >>> 0] = BigInt(Math.floor(ctime / 1e3));
     HEAPU32[(((buf) + (80)) >>> 2) >>> 0] = (ctime % 1e3) * 1e3 * 1e3;
-    HEAP64[(((buf) + (88)) >>> 3)] = BigInt(stat.ino);
+    HEAP64[(((buf) + (88)) >>> 3) >>> 0] = BigInt(stat.ino);
     return 0;
   },
   writeStatFs(buf, stats) {
@@ -3525,6 +3468,10 @@ function ___syscall_fcntl64(fd, cmd, varargs) {
 
      case 13:
      case 14:
+      // Pretend that the locking is successful. These are process-level locks,
+      // and Emscripten programs are a single process. If we supported linking a
+      // filesystem between programs, we'd need to do more here.
+      // See https://github.com/emscripten-core/emscripten/issues/23697
       return 0;
     }
     return -28;
@@ -3746,7 +3693,7 @@ function _clock_time_get(clk_id, ignored_precision, ptime) {
   }
   // "now" is in ms, and wasi times are in ns.
   var nsec = Math.round(now * 1e3 * 1e3);
-  HEAP64[((ptime) >>> 3)] = BigInt(nsec);
+  HEAP64[((ptime) >>> 3) >>> 0] = BigInt(nsec);
   return 0;
 }
 
@@ -3755,6 +3702,8 @@ var getHeapMax = () => // Stay one Wasm page short of 4GB: while e.g. Chrome is 
 // for any code that deals with heap sizes, which would require special
 // casing all heap size related code to treat 0 specially.
 4294901760;
+
+var alignMemory = (size, alignment) => Math.ceil(size / alignment) * alignment;
 
 var growMemory = size => {
   var b = wasmMemory.buffer;
@@ -3814,7 +3763,7 @@ function _emscripten_resize_heap(requestedSize) {
 
 var onExits = [];
 
-var addOnExit = cb => onExits.unshift(cb);
+var addOnExit = cb => onExits.push(cb);
 
 var JSEvents = {
   memcpy(target, src, size) {
@@ -3969,7 +3918,6 @@ var wasmTableMirror = [];
 var getWasmTableEntry = funcPtr => {
   var func = wasmTableMirror[funcPtr];
   if (!func) {
-    if (funcPtr >= wasmTableMirror.length) wasmTableMirror.length = funcPtr + 1;
     /** @suppress {checkTypes} */ wasmTableMirror[funcPtr] = func = wasmTable.get(funcPtr);
   }
   return func;
@@ -4421,7 +4369,7 @@ function _fd_seek(fd, offset, whence, newOffset) {
     if (isNaN(offset)) return 61;
     var stream = SYSCALLS.getStreamFromFD(fd);
     FS.llseek(stream, offset, whence);
-    HEAP64[((newOffset) >>> 3)] = BigInt(stream.position);
+    HEAP64[((newOffset) >>> 3) >>> 0] = BigInt(stream.position);
     if (stream.getdents && offset === 0 && whence === 0) stream.getdents = null;
     // reset readdir state
     return 0;
@@ -4736,7 +4684,7 @@ var GL = {
       }
       canvas.getContext = fixedGetContext;
     }
-    var ctx = (webGLContextAttributes.majorVersion > 1) ? canvas.getContext("webgl2", webGLContextAttributes) : (canvas.getContext("webgl", webGLContextAttributes));
+    var ctx = (webGLContextAttributes.majorVersion > 1) ? canvas.getContext("webgl2", webGLContextAttributes) : canvas.getContext("webgl", webGLContextAttributes);
     if (!ctx) return 0;
     var handle = GL.registerContext(ctx, webGLContextAttributes);
     return handle;
@@ -5875,7 +5823,9 @@ var Browser = {
   this.title = title;
   this.monitor = monitor;
   this.share = share;
-  this.attributes = Object.assign({}, GLFW.hints);
+  this.attributes = {
+    ...GLFW.hints
+  };
   this.inputModes = {
     208897: 212993,
     // GLFW_CURSOR (GLFW_CURSOR_NORMAL)
@@ -6848,7 +6798,7 @@ var GLFW = {
       reader.readAsArrayBuffer(file);
       var filename = stringToNewUTF8(path);
       filenamesArray.push(filename);
-      HEAPU32[((filenames + i * 4) >>> 2) >>> 0] = filename;
+      HEAPU32[(((filenames) + (i * 4)) >>> 2) >>> 0] = filename;
     }
     for (var i = 0; i < count; ++i) {
       save(event.dataTransfer.files[i]);
@@ -7029,7 +6979,9 @@ var GLFW = {
     }
   },
   defaultWindowHints: () => {
-    GLFW.hints = Object.assign({}, GLFW.defaultHints);
+    GLFW.hints = {
+      ...GLFW.defaultHints
+    };
   },
   createWindow: (width, height, title, monitor, share) => {
     var i, id;
@@ -7086,9 +7038,13 @@ var GLFW = {
       getWasmTableEntry(win.windowCloseFunc)(win.id);
     }
     GLFW.windows[win.id - 1] = null;
-    if (GLFW.active.id == win.id) GLFW.active = null;
+    if (GLFW.active.id == win.id) {
+      GLFW.active = null;
+    }
     // Destroy context when no alive windows
-    for (var i = 0; i < GLFW.windows.length; i++) if (GLFW.windows[i] !== null) return;
+    for (win of GLFW.windows) {
+      if (win !== null) return;
+    }
     delete Module["ctx"];
   },
   swapBuffers: winid => {},
@@ -7446,30 +7402,17 @@ var stringToUTF8OnStack = str => {
   return ret;
 };
 
-var FS_createPath = FS.createPath;
+var FS_createPath = (...args) => FS.createPath(...args);
 
-var FS_unlink = path => FS.unlink(path);
+var FS_unlink = (...args) => FS.unlink(...args);
 
-var FS_createLazyFile = FS.createLazyFile;
+var FS_createLazyFile = (...args) => FS.createLazyFile(...args);
 
-var FS_createDevice = FS.createDevice;
+var FS_createDevice = (...args) => FS.createDevice(...args);
 
 FS.createPreloadedFile = FS_createPreloadedFile;
 
 FS.staticInit();
-
-// Set module methods based on EXPORTED_RUNTIME_METHODS
-Module["FS_createPath"] = FS.createPath;
-
-Module["FS_createDataFile"] = FS.createDataFile;
-
-Module["FS_createPreloadedFile"] = FS.createPreloadedFile;
-
-Module["FS_unlink"] = FS.unlink;
-
-Module["FS_createLazyFile"] = FS.createLazyFile;
-
-Module["FS_createDevice"] = FS.createDevice;
 
 // This error may happen quite a bit. To avoid overhead we reuse it (and
 // suffer a lack of stack info).
@@ -7496,14 +7439,54 @@ for (/**@suppress{duplicate}*/ var i = 0; i <= 288; ++i) {
   miniTempWebGLFloatBuffers[i] = miniTempWebGLFloatBuffersStorage.subarray(0, i);
 }
 
-// exports
-Module["requestFullscreen"] = Browser.requestFullscreen;
+// End JS library code
+// include: postlibrary.js
+// This file is included after the automatically-generated JS library code
+// but before the wasm module is created.
+{
+  // Begin ATMODULES hooks
+  if (Module["noExitRuntime"]) noExitRuntime = Module["noExitRuntime"];
+  if (Module["preloadPlugins"]) preloadPlugins = Module["preloadPlugins"];
+  if (Module["print"]) out = Module["print"];
+  if (Module["printErr"]) err = Module["printErr"];
+  if (Module["wasmBinary"]) wasmBinary = Module["wasmBinary"];
+  // End ATMODULES hooks
+  if (Module["arguments"]) arguments_ = Module["arguments"];
+  if (Module["thisProgram"]) thisProgram = Module["thisProgram"];
+}
 
-Module["setCanvasSize"] = Browser.setCanvasSize;
+// Begin runtime exports
+Module["addRunDependency"] = addRunDependency;
 
-Module["getUserMedia"] = Browser.getUserMedia;
+Module["removeRunDependency"] = removeRunDependency;
 
-Module["createContext"] = Browser.createContext;
+Module["FS_createPreloadedFile"] = FS_createPreloadedFile;
+
+Module["FS_unlink"] = FS_unlink;
+
+Module["FS_createPath"] = FS_createPath;
+
+Module["FS_createDevice"] = FS_createDevice;
+
+Module["FS_createDataFile"] = FS_createDataFile;
+
+Module["FS_createLazyFile"] = FS_createLazyFile;
+
+// End runtime exports
+// Begin JS library exports
+// End JS library exports
+// end include: postlibrary.js
+// Imports from the Wasm binary.
+var _main, _malloc, _free, __emscripten_stack_restore, __emscripten_stack_alloc, _emscripten_stack_get_current;
+
+function assignWasmExports(wasmExports) {
+  Module["_main"] = _main = wasmExports["__main_argc_argv"];
+  _malloc = wasmExports["malloc"];
+  _free = wasmExports["free"];
+  __emscripten_stack_restore = wasmExports["_emscripten_stack_restore"];
+  __emscripten_stack_alloc = wasmExports["_emscripten_stack_alloc"];
+  _emscripten_stack_get_current = wasmExports["emscripten_stack_get_current"];
+}
 
 var wasmImports = {
   /** @export */ __assert_fail: ___assert_fail,
@@ -7582,20 +7565,6 @@ var wasmExports;
 
 createWasm();
 
-var ___wasm_call_ctors = () => (___wasm_call_ctors = wasmExports["__wasm_call_ctors"])();
-
-var _main = Module["_main"] = (a0, a1) => (_main = Module["_main"] = wasmExports["__main_argc_argv"])(a0, a1);
-
-var _malloc = a0 => (_malloc = wasmExports["malloc"])(a0);
-
-var _free = a0 => (_free = wasmExports["free"])(a0);
-
-var __emscripten_stack_restore = a0 => (__emscripten_stack_restore = wasmExports["_emscripten_stack_restore"])(a0);
-
-var __emscripten_stack_alloc = a0 => (__emscripten_stack_alloc = wasmExports["_emscripten_stack_alloc"])(a0);
-
-var _emscripten_stack_get_current = () => (_emscripten_stack_get_current = wasmExports["emscripten_stack_get_current"])();
-
 // Argument name here must shadow the `wasmExports` global so
 // that it is recognised by metadce and minify-import-export-names
 // passes.
@@ -7612,22 +7581,6 @@ function applySignatureConversions(wasmExports) {
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
-Module["addRunDependency"] = addRunDependency;
-
-Module["removeRunDependency"] = removeRunDependency;
-
-Module["FS_createPreloadedFile"] = FS_createPreloadedFile;
-
-Module["FS_unlink"] = FS_unlink;
-
-Module["FS_createPath"] = FS_createPath;
-
-Module["FS_createDevice"] = FS_createDevice;
-
-Module["FS_createDataFile"] = FS_createDataFile;
-
-Module["FS_createLazyFile"] = FS_createLazyFile;
-
 function callMain(args = []) {
   var entryFunction = _main;
   args.unshift(thisProgram);
@@ -7668,7 +7621,7 @@ function run(args = arguments_) {
     initRuntime();
     preMain();
     Module["onRuntimeInitialized"]?.();
-    var noInitialRun = Module["noInitialRun"];
+    var noInitialRun = Module["noInitialRun"] || false;
     if (!noInitialRun) callMain(args);
     postRun();
   }
@@ -7683,11 +7636,15 @@ function run(args = arguments_) {
   }
 }
 
-if (Module["preInit"]) {
-  if (typeof Module["preInit"] == "function") Module["preInit"] = [ Module["preInit"] ];
-  while (Module["preInit"].length > 0) {
-    Module["preInit"].pop()();
+function preInit() {
+  if (Module["preInit"]) {
+    if (typeof Module["preInit"] == "function") Module["preInit"] = [ Module["preInit"] ];
+    while (Module["preInit"].length > 0) {
+      Module["preInit"].shift()();
+    }
   }
 }
+
+preInit();
 
 run();

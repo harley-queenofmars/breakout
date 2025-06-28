@@ -1,10 +1,10 @@
 [  
     {
     "name": "Emscripten",
-    "toolchainFile": "/home/darko/Documents/GitHub/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+    "toolchainFile": "/opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
     "compilers": {
-      "C": "/home/darko/Documents/GitHub/emsdk/upstream/emscripten/emcc",
-      "CXX": "/home/darko/Documents/GitHub/emsdk/upstream/emscripten/em++"
+      "C": "/opt/emsdk/upstream/emscripten/emcc",
+      "CXX": "/opt/emsdk/upstream/emscripten/em++"
     }
   }
 ]
